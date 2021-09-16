@@ -9,7 +9,8 @@ int value = 0;
 
 int delayV = 1000;
 
-#define ONE_WIRE_BUS D3
+//#define ONE_WIRE_BUS D3
+#define ONE_WIRE_BUS 4
 
 ///SENSORS
 //  Variables
