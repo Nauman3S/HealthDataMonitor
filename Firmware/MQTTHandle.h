@@ -50,18 +50,6 @@ SoftwareSerial GPRSSerial(12, 14); // RX, TX
 
 // MQTT details
 
-const char *topicDev = "pn1/#";
-const char *topicInit = "pn1/init";
-const char *topicLedStatus = "pn1/ledstatus";
-const char *heartBeatSend = "pn1/heartbeat/send";
-const char *heartBeatResponse = "pn1/heartbeat/response";
-const char *paymentSend = "pn1/payment/send";
-const char *paymentResponse = "pn1/payment/response";
-const char *mdbStateInfo = "pn1/mdb/state";
-const char *debugH = "pn1/mdb/debug";
-const char *infoH = "pn1/mdb/info";
-const char *infoHResponse = "pn1/mdb/inforesponse";
-
 #include <TinyGsmClient.h>
 #include <PubSubClient.h>
 
@@ -209,7 +197,7 @@ boolean mqttConnect()
   //SerialMon.print(broker);
 
   // Connect to MQTT Broker
-  boolean status = mqtt.connect(randomString("pn1").c_str(), "pn1", "payninja1a");
+  boolean status = mqtt.connect(randomString("pn1").c_str(), "dev", "smartmonitor");
 
   // Or, if you want to authenticate MQTT:
   //boolean status = mqtt.connect("GsmClientName", "mqtt_user", "mqtt_pass");
@@ -222,8 +210,8 @@ boolean mqttConnect()
   }
 
   //SerialMon.println(" OK");
-  mqtt.publish(topicInit, "GSM CONNECTED; MQTT READY");
-  mqtt.subscribe(topicDev);
+
+  mqtt.subscribe(ss.getTopicWithMAC("configs").c_str());
 
   return mqtt.connected();
 }
@@ -275,12 +263,8 @@ void mqttCallback(char *topic, byte *payload, unsigned int len)
   //
   //  SerialMon.write(payload, len);
   //  //SerialMon.println();
-  if (String(topic) == String(heartBeatResponse))
+  if (String(topic) == String(ss.getTopicWithMAC("configs")))
   {
-    // Serial.println("HB Response CODE 11");
-  }
-
-  else if (String(topic) == String(paymentResponse))
-  {
+    Serial.println("Configs Received.");
   }
 }

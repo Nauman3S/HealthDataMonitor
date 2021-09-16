@@ -3,33 +3,34 @@
 #include "consts.h"
 #include "SoftwareStack.h"
 #include "SensorsHandle.h"
+SoftwareStack ss; //SS instance
 #include "GPRSHandler.h"
 
-
-SoftwareStack ss;//SS instance
 void setup()
 {
 
   Serial.begin(CONSOLE_BAUD_R);
   MQTTsetup();
   setupSensors();
-  
+  Serial.print("Device ID: ");
+  Serial.println(ss.getMACAddress());
+
   DebugPrint("VitalsMonitor");
 }
 
 void loop()
 {
 
+  MQTTloop();
 
-    MQTTloop();
+  long now = millis();
+  if (now - lastMsg > delayV)
+  {
+    lastMsg = now;
+    publish(ss.getTopicWithMAC("BPM"), getBPM());
+    publish(ss.getTopicWithMAC("Temperature"), getTemperature());
 
-    long now = millis();
-    if (now - lastMsg > delayV) {
-      lastMsg = now;
-      //publish();
-      //client.publish("outTopic/BPM", ss.StrToCharArray(getBPM()));
-      //client.publish("outTopic/Temperature", ss.StrToCharArray(getTemperature()));
-      
-      
+    //client.publish("outTopic/BPM", ss.StrToCharArray(getBPM()));
+    //client.publish("outTopic/Temperature", ss.StrToCharArray(getTemperature()));
   }
 }
