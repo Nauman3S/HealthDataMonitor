@@ -82,7 +82,7 @@ You should have Arduino IDE Installed
       1. If you are using windows, the libraries directory will be Documents/Arduino/libraries
 
 ##### ESP8266 Node FW Uploading
-  1.  Select ESP32 Dev Module from Tools->Board->ESP8266
+  1.  Select NodeMCU 1.0(ESP-12E Module) from Tools->Board->ESP8266
   2.  Select the correct port from Tools->Port
   3.  Then open Firmware.ino file,
   4.  Now Upload the Code to your NodeMCU 1.0(ESP-12E Module).
